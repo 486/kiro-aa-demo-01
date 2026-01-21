@@ -5,6 +5,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './tests',
+  globalSetup: './tests/global-setup.ts',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
@@ -24,13 +25,13 @@ export default defineConfig({
     {
       command: 'PORT=3001 npm start',
       url: 'http://localhost:3001/health',
-      reuseExistingServer: !process.env.CI,
+      reuseExistingServer: false,
     },
     {
       command: 'npm run dev',
       cwd: './frontend',
       url: 'http://localhost:5173',
-      reuseExistingServer: !process.env.CI,
+      reuseExistingServer: false,
     },
   ],
 });

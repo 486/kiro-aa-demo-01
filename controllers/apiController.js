@@ -1,5 +1,5 @@
 const DatabaseService = require('../db/database');
-const db = new DatabaseService();
+let db = new DatabaseService();
 
 // ============================================
 // SESSION CONTROLLERS
@@ -346,6 +346,41 @@ exports.getMetadata = (req, res) => {
     res.status(500).json({ 
       error: 'Failed to retrieve metadata',
       message: error.message 
+    });
+  }
+};
+
+/**
+ * Reset database to seed state (non-production only)
+ */
+exports.resetDatabase = (req, res) => {
+  // Block in production
+  if (process.env.NODE_ENV === 'production') {
+    return res.status(403).json({
+      success: false,
+      error: 'Database reset is not allowed in production'
+    });
+  }
+
+  try {
+    const { resetDatabase } = require('../db/reset');
+    resetDatabase();
+    
+    // Reinitialize the database connection
+    db.close();
+    const DatabaseService = require('../db/database');
+    db = new DatabaseService();
+
+    res.json({
+      success: true,
+      message: 'Database reset to seed state'
+    });
+  } catch (error) {
+    console.error('Error in resetDatabase:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to reset database',
+      message: error.message
     });
   }
 };

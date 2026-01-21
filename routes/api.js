@@ -90,4 +90,11 @@ router.delete('/schedule/:scheduleId', apiController.removeFromSchedule);
  */
 router.get('/metadata', apiController.getMetadata);
 
+/**
+ * @route   POST /api/reset
+ * @desc    Reset database to seed state (non-production only)
+ * @access  Development/Test only
+ */
+router.post('/reset', apiController.resetDatabase);
+
 module.exports = router;
