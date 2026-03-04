@@ -55,3 +55,7 @@ temp/
 *_COMPLETE.txt
 *_STRUCTURE.txt
 START_HERE.txt
+
+# Environment configuration
+.envrc
+.playwright-cli/
